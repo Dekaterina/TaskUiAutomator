@@ -52,26 +52,24 @@ class ChangeTextTest {
     }
 
     @Test
-    fun testEmptyText() {
-        val packageName = MODEL_PACKAGE
-        waitForPackage(packageName)
-        device.findObject(By.res(packageName, "userInput")).text = ""
-        device.findObject(By.res(packageName, "buttonChange")).click()
-        val initialText = "Initial Text"
-        val result = device.findObject(By.res(packageName, "textToBeChanged")).text
-        assertEquals(initialText, result)
+    fun testEmptyStringInput() {
+        val appPackageName = MODEL_PACKAGE
+        waitForPackage(appPackageName)
+        val initialText = device.findObject(By.res(appPackageName, "textToBeChanged")).text
+        device.findObject(By.res(appPackageName, "userInput")).text = " "
+        device.findObject(By.res(appPackageName, "buttonChange")).click()
+        val resultText = device.findObject(By.res(appPackageName, "textToBeChanged")).text
+        assertEquals(resultText, initialText)
     }
 
     @Test
     fun testOpenNewActivity() {
-        val packageName = MODEL_PACKAGE
-        waitForPackage(packageName)
-        val newText = "New Text"
-        device.findObject(By.res(packageName, "userInput")).text = newText
-        device.findObject(By.res(packageName, "buttonStartActivity")).click()
-        device.wait(Until.hasObject(By.pkg("$packageName.SecondActivity")), TIMEOUT)
-        val secondActivityTextView = device.findObject(By.res(packageName, "secondActivityText"))
-        val result = secondActivityTextView.text
-        assertEquals(newText, result)
+        val appPackageName = MODEL_PACKAGE
+        waitForPackage(appPackageName)
+        device.findObject(By.res(appPackageName, "userInput")).text = textToSet
+        device.findObject(By.res(appPackageName, "buttonActivity")).click()
+        waitForPackage(appPackageName)
+        val displayedText = device.findObject(By.res(appPackageName, "text")).text
+        assertEquals(displayedText, textToSet)
     }
 }
